@@ -11,7 +11,11 @@ int http_parse_request(
         return -1;
     }
 
-    memset(result, 0, sizeof(HttpRequest));
+    memset(
+        result,
+        0,
+        sizeof(HttpRequest)
+    );
 
     /*
      * HTTP Requestの最初の行を解析する。
@@ -30,6 +34,32 @@ int http_parse_request(
 
     if (fields != 3) {
         return -1;
+    }
+
+    /*
+     * HTTP HeaderとBodyの境界を探す。
+     *
+     * GET / HTTP/1.1
+     * Host: localhost
+     *
+     * <---- header ---->
+     *                    <---- body ---->
+     */
+    const char *body_start = strstr(
+        request,
+        "\r\n\r\n"
+    );
+
+    if (body_start != NULL) {
+
+        body_start += 4;
+
+        snprintf(
+            result->body,
+            HTTP_BODY_SIZE,
+            "%s",
+            body_start
+        );
     }
 
     return 0;
