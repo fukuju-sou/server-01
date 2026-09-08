@@ -9,7 +9,8 @@ SRCS = \
 	http/http_server.c \
 	http/http_client.c \
 	http/http_parser.c \
-	http/http_response.c
+	http/http_response.c \
+	http/http_router.c
 
 OBJS = $(SRCS:.c=.o)
 
